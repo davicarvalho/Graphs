@@ -8,68 +8,68 @@ import graph.Graph;
 
 public class BFS {
 
-	public static final byte branco = 0;
-	public static final byte cinza = 1;
-	public static final byte preto = 2;
+	public static final byte white = 0;
+	public static final byte grey = 1;
+	public static final byte black = 2;
 	private int d[];
 //	private int f[];
-	private int antecessor[];
-	private Graph grafo;
+	private int parents[];
+	private Graph graph;
 
 	public BFS(Graph grafo) {
-		this.grafo = grafo;
-		int n = this.grafo.numVertices();
+		this.graph = grafo;
+		int n = this.graph.numVertices();
 
 		this.d = new int[n];
 //		this.f = new int[n];
-		this.antecessor = new int[n];
+		this.parents = new int[n];
 	}
 
-	public void buscaEmLargura(Integer s) throws Exception {
-		int cor[] = new int[this.grafo.numVertices()];
+	public void search(Integer s) throws Exception {
+		int cor[] = new int[this.graph.numVertices()];
 
-		for (int u = 0; u < grafo.numVertices(); u++) {
-			cor[u] = branco;
+		for (int u = 0; u < graph.numVertices(); u++) {
+			cor[u] = white;
 			this.d[u] = Integer.MAX_VALUE;
-			this.antecessor[u] = -1;
+			this.parents[u] = -1;
 		}
-		cor[s] = cinza;
+		cor[s] = grey;
 		this.d[s] = 0;
-		this.visitaBfs(s, cor);
+		this.bfsVisit(s, cor);
 	}
 
-	private void visitaBfs(Integer u, int cor[]) throws Exception {
+	private void bfsVisit(Integer u, int color[]) throws Exception {
 		List<Integer> queue = new ArrayList<>();
 		queue.add(u);
 		while (!queue.isEmpty()) {
 			u = queue.remove(0);
-			if (!grafo.emptyAdjecyList(u)) {
+			if (!graph.emptyAdjecyList(u)) {
 				int it = 0;
-				Edge a = grafo.firstElementAdjList(u);
+				Edge a = graph.firstElementAdjList(u);
 				while (a != null) {
 					Integer v = a.v2;
-					if (cor[v] == branco) {
+					if (color[v] == white) {
 						queue.add(v);
-						cor[v] = cinza;
+						color[v] = grey;
 						d[v] = d[u] + 1;
-						antecessor[v] = u;
+						parents[v] = u;
 					}
 					it++;
-					a = grafo.nextAdj(u, it);
+					a = graph.nextAdj(u, it);
 				}
 			}
-			cor[u] = preto;
+			color[u] = black;
 		}
 	}
 	
-	public void imprimeCaminho(Integer origem, Integer destino) {
-		if(origem == destino) {
-			System.out.println(origem);
-		} else if(antecessor[destino] == -1) {
-			System.out.println("Nao existe caminho");
+	public void printPath(Integer origin, Integer destiny) {
+		if(origin == destiny) {
+			System.out.println(origin);
+		} else if(parents[destiny] == -1) {
+			System.out.println("There is no path");
 		}else {
-			imprimeCaminho(origem, antecessor[destino]);
-			System.out.println(destino);
+			printPath(origin, parents[destiny]);
+			System.out.println(destiny);
 		}
 	}
 

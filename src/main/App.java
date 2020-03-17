@@ -21,7 +21,7 @@ public class App {
 		System.out.println(g.toString());
 		
 		BFS bfs = new BFS(g);
-		bfs.buscaEmLargura(0);
-		bfs.imprimeCaminho(0, 4);
+		bfs.search(0);
+		bfs.printPath(0, 4);
 	}
 }
